@@ -1,0 +1,42 @@
+* Classification
+
+** aget_comb.c:
+   creates threads in loop, plus 1 static thread; ONE lock only :-/
+   EASYly instrumented?
+
+** ctrace_comb.c:
+   ONE lock only
+
+** knot_comb.c:
+   Configurable between DYNAMIC and FIXED threads.
+   FIXED setting easily instrumented?
+   One static lock, plus dynamic ones for some kind of cache-entries
+   NB: Head uses g_use_cache=0! Hard to say if we can simply manipulate
+   the flag HERE without running cpp again or looking at the original source, but that's what I did.
+   SLPs: line 508?
+
+   - Has RACES: yes, but looks WRONG?!
+      Datarace at (alloc@knot_comb.c:308):
+      write in some thread with lockset: {} (knot_comb.c:324)
+      write in some thread with lockset: {g_cache_mutex} (knot_comb.c:1816)
+      write in some thread with lockset: {} (knot_comb.c:313)
+   - We might be able to compare NEW with OLD races.
+
+** ptester.c:
+   - N+1 threads, ONE lock only :-/
+   - easily instrumented.
+  
+** zebedee_comb.c:
+   - SLOW in Goblint
+   - DYNAMIC thread creation?  
+
+** zfs-fuse_comb.c:
+  - FAILS in Goblint:
+      HTML-Output] Create html files ...
+      Fatal error: exception Sys_error("zfs-fuse/zfs_vnops.c: No such file or directory")
+    Kalmer suggests to remove #line pragmas. After a "grep -v" it seems
+      to do the trick.
+
+  - hardcoded N_t=40, plus 1 static thread; 2 static locks
+  - SLPs: ? Never seems to hold both locks, so should be able to certify.
+
