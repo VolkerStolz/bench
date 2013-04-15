@@ -1,3 +1,12 @@
+* General
+   Run Goblint like this:
+   goblint --set ana.activated "[['base', 'maylocks','thread-id-location']]" --sets result html file.c
+   Then open the `result` folder in a web-browser. Note: may take VERY long!
+   For our version, append 'slps' to the analysis list above.
+
+   Alternatives to the HTML output are `pretty` and `indented` or `compact`
+for XML output.
+
 * Classification
 
 ** aget_comb.c:
