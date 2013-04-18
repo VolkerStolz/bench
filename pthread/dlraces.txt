@@ -1,10 +1,11 @@
 * General
    Run Goblint like this:
-   goblint --set ana.activated "[['base', 'maylocks','thread-id-location']]" --sets result html file.c
-   Then open the `result` folder in a web-browser. Note: may take VERY long!
-   For our version, append 'slps' to the analysis list above.
+   #+begin-example
+   goblint --set ana.activated "[['base', 'maylocks','thread-id-location']],'slps'" --sets result html file.c
+   #+end-example
+   Then open the ~result~ folder in a web-browser. Note: your browser may take VERY long!
 
-   Alternatives to the HTML output are `pretty` and `indented` or `compact`
+   Alternatives to the HTML output are ~pretty~, and ~indented~ or ~compact~
 for XML output.
 
 * Classification
@@ -20,15 +21,16 @@ for XML output.
    Configurable between DYNAMIC and FIXED threads.
    FIXED setting easily instrumented?
    One static lock, plus dynamic ones for some kind of cache-entries
-   NB: Head uses g_use_cache=0! Hard to say if we can simply manipulate
+   NB: Head uses g_use_cache=0, g_spawn_on_demand! Hard to say if we can simply manipulate
    the flag HERE without running cpp again or looking at the original source, but that's what I did.
-   SLPs: line 508?
 
-   - Has RACES: yes, but looks WRONG?!
+   - Has RACES: yes, but looks WRONG?! (What did I mean there...)
       Datarace at (alloc@knot_comb.c:308):
       write in some thread with lockset: {} (knot_comb.c:324)
       write in some thread with lockset: {g_cache_mutex} (knot_comb.c:1816)
       write in some thread with lockset: {} (knot_comb.c:313)
+   - Single SLP in line 508, in several contexts
+   - Manual instrumentation shows NO RACE at this place
    - We might be able to compare NEW with OLD races.
 
 ** ptester.c:
@@ -37,7 +39,8 @@ for XML output.
   
 ** zebedee_comb.c:
    - SLOW in Goblint
-   - DYNAMIC thread creation?  
+   - DYNAMIC thread creation? 
+   - NO SLPs found 
 
 ** zfs-fuse_comb.c:
   - FAILS in Goblint:
@@ -47,5 +50,6 @@ for XML output.
       to do the trick.
 
   - hardcoded N_t=40, plus 1 static thread; 2 static locks
-  - SLPs: ? Never seems to hold both locks, so should be able to certify.
+  - NO SLPs! Never seems to hold both locks, so should be able to certify.
+
 
