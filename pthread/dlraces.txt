@@ -1,7 +1,7 @@
 * General
-   Run Goblint like this:
+  Run Goblint like this:
    #+begin-example
-   goblint --set ana.activated "[['base', 'maylocks','thread-id-location']],'slps'" --sets result html file.c
+   goblint --set ana.activated "[['base', 'maylocks','thread-id-location','slps']]" --sets result html file.c
    #+end-example
    Then open the ~result~ folder in a web-browser. Note: your browser may take VERY long!
 
